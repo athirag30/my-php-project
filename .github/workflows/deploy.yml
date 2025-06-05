@@ -1,0 +1,18 @@
+name: Deploy to Windows VM
+
+on:
+  push:
+    paths:
+      - 'index.php'
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Copy index.php to site folder
+        run: |
+          copy index.php C:\app\index.php /Y
