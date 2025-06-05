@@ -1,9 +1,9 @@
-name: Deploy to Windows VM
+name: Deploy to Azure VM
 
 on:
   push:
-    paths:
-      - 'index.php'
+    branches:
+      - main  # or "master" if you're using that
 
 jobs:
   deploy:
@@ -11,8 +11,32 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
-      - name: Copy index.php to site folder
+      - name: Copy files to C:\app
         run: |
-          copy index.php C:\app\index.php /Y
+          if (-Not (Test-Path -Path "C:\app")) {
+            New-Item -ItemType Directory -Force -Path "C:\app"
+          }
+          Copy-Item -Path "${{ github.workspace }}\index.php" -Destination "C:\app" -Force
+name: Deploy to Azure VM
+
+on:
+  push:
+    branches:
+      - main  # or "master" if you're using that
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Copy files to C:\app
+        run: |
+          if (-Not (Test-Path -Path "C:\app")) {
+            New-Item -ItemType Directory -Force -Path "C:\app"
+          }
+          Copy-Item -Path "${{ github.workspace }}\index.php" -Destination "C:\app" -Force
